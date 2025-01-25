@@ -1,0 +1,125 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:"Bebas Neue", serif;
+    
+}
+
+body {
+    height: 100vh;
+    background:linear-gradient(90deg,rgb(242, 0, 255)0%, rgba(0,212, 255)100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.task-container {
+    border: 2px solid #fff;
+    padding: 30px 40px;
+    width: 40%;
+    min-width: 500px;
+}
+
+.new-task-container {
+    background-color: #fff;
+    padding: 30px 20px;
+    border-radius: 5px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    display: flex;
+}
+
+.new-task-container input {
+    flex: 3;
+    font-size: 1rem;
+    border: 2px solid #d1d3d4;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.new-task-container input:focus {
+outline: none;
+border-color: rgb(72, 72, 224);
+
+}
+
+.new-task-container button {
+    flex: 1;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    font-weight: 500;
+    height: 100%;
+    color: #fff;
+    margin-left: 12px;
+    cursor: pointer;
+    background-color: rgb(72, 72, 224);
+    padding: 12px;
+}
+.new-task-container:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7); /* Sombra suave */ }
+.tasks-container {
+    background-color: #fff;
+    padding: 30px;
+    margin-top: 60px;
+    border-radius: 12px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    width: 100%;
+}
+
+/* Utilities */
+
+.error {
+    border: 2px solid red !important;
+    
+}
+
+.error::placeholder {
+    color: red;
+}
+
+h1 {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 3rem;
+    text-align: center;
+    font-weight: bold;
+    padding: 1px; 
+    color: #d1d3d4;
+    background: linear-gradient(90deg, rgb(0, 0, 0) 0%, rgba(0, 212, 255) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-stroke: 0.1px rgb(0, 0, 0);
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  
+
+
+}
+
+.task-item i{
+    background-color: rgb(72, 72, 224);
+    padding: 12px;
+    border-radius: 6px;
+    color: #fff;
+    transition: transform 0.2s;
+    cursor: pointe;
+
+}
+
+.task-item i:hover {
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7)
+}
+.completed {
+
+    text-decoration: line-through;
+}
+button:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7); /* Sombra suave */ }
