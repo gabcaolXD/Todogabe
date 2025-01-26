@@ -89,36 +89,42 @@ const handleInputChange = () => {
     };
 
     const refreshTaskUsingLocalStorage = () => {
-        const tasksFromLocalStorage = JSON.parse(localStorage.getItem('tasks'));
+        // Tenta obter os dados do localStorage
+        const tasksFromLocalStorage = JSON.parse(localStorage.getItem('tasks')) || [];
+    
+        // Verifica se é realmente um array
+        if (!Array.isArray(tasksFromLocalStorage)) {
+            console.error("O conteúdo de localStorage não é um array válido.");
+            return;
+        }
+    
+        // Itera pelas tarefas salvas
         for (const task of tasksFromLocalStorage) {
-            
-        const taskItemContainer = document.createElement('div');
-        taskItemContainer.classList.add('task-item');
-
-        const taskContent = document.createElement('p');
-        taskContent.innerText = task.descripition;
-
-        if (task.isCompleted) {
-            taskContent.classList.add('completed');
+            const taskItemContainer = document.createElement('div');
+            taskItemContainer.classList.add('task-item');
+    
+            const taskContent = document.createElement('p');
+            taskContent.innerText = task.descripition;
+    
+            if (task.isCompleted) {
+                taskContent.classList.add('completed');
+            }
+    
+            taskContent.addEventListener('click', () => handleClick(taskContent));
+    
+            const deleteItem = document.createElement('i');
+            deleteItem.classList.add("fa");
+            deleteItem.classList.add('fa-trash-alt');
+    
+            deleteItem.addEventListener("click", () =>
+                handleDeleteClick(taskItemContainer, taskContent));
+    
+            taskItemContainer.appendChild(taskContent);
+            taskItemContainer.appendChild(deleteItem);
+            tasksContainer.appendChild(taskItemContainer);
         }
-
-        taskContent.addEventListener('click', () => handleClick(taskContent)); 
-
+    };
         
-
-        const deleteItem= document.createElement('i');
-        deleteItem.classList.add("fa");
-        deleteItem.classList.add('fa-trash-alt');
-
-        deleteItem.addEventListener("click", () =>
-             handleDeleteClick(taskItemContainer, taskContent))
-
-        taskItemContainer.appendChild(taskContent);
-        taskItemContainer.appendChild(deleteItem);
-        tasksContainer.appendChild(taskItemContainer)
-        }
-
-        }
 
     refreshTaskUsingLocalStorage();
 
