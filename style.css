@@ -109,7 +109,7 @@ h1 {
     border-radius: 6px;
     color: #fff;
     transition: transform 0.2s;
-    cursor: pointe;
+    cursor: pointer;
 
 }
 
@@ -117,9 +117,19 @@ h1 {
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7)
 }
+
+.task-item p:hover {
+
+    cursor: pointer;
+}
+
 .completed {
 
     text-decoration: line-through;
+}
+
+.completed:hover {
+    cursor: pointer;
 }
 button:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7); /* Sombra suave */ }
