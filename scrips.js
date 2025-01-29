@@ -1,32 +1,34 @@
+// Selecionando os elementos da interface
 const inputElement = document.querySelector('.new-task-input');
 const addTaskButton = document.querySelector('.new-task-button');
 const tasksContainer = document.querySelector('.tasks-container');
 const datePicker = document.getElementById('date-picker');
 const loadTasksButton = document.querySelector('.load-tasks-button');
-const tituloElement = document.querySelector('.titulo'); // Se necessário
+const tituloElement = document.getElementById('titulo');
 
+// Validação do input
 const validateInput = () => inputElement.value.trim().length > 0;
 
-const handleAddTask  = () => {
-    const inputIsValid  = validateInput();
+// Adiciona nova tarefa
+const handleAddTask = () => {
+    const inputIsValid = validateInput();
 
     if (!inputIsValid) {
-        return inputElement.classList.add("error");
+        inputElement.classList.add("error");
+        return;
     }
 
+    // Criar estrutura do item da tarefa
     const taskItemContainer = document.createElement('div');
     taskItemContainer.classList.add('task-item');
 
     const taskContent = document.createElement('p');
     taskContent.innerText = inputElement.value;
-
-    taskContent.addEventListener('click', () => handleClick(taskContent)); 
+    taskContent.addEventListener('click', () => handleClick(taskContent));
 
     const deleteItem = document.createElement('i');
     deleteItem.classList.add("fa", "fa-trash-alt");
-
-    deleteItem.addEventListener("click", () =>
-        handleDeleteClick(taskItemContainer, taskContent));
+    deleteItem.addEventListener("click", () => handleDeleteClick(taskItemContainer));
 
     taskItemContainer.appendChild(taskContent);
     taskItemContainer.appendChild(deleteItem);
@@ -35,53 +37,36 @@ const handleAddTask  = () => {
     inputElement.value = "";
     updateLocalStorage();
 };
-    
+
+// Alternar estado de conclusão da tarefa
 const handleClick = (taskContent) => {
-    const tasks = tasksContainer.childNodes;  
-    for (const task of tasks) {
-        if (task.firstChild.isSameNode(taskContent)) {
-            task.firstChild.classList.toggle("completed");
-        }
-    }
-
+    taskContent.classList.toggle('completed');
     updateLocalStorage();
 };
 
-const handleDeleteClick = (taskItemContainer, taskContent) => {
-    const tasks = tasksContainer.childNodes;
-    for (const task of tasks) {
-        if (task.firstChild.isSameNode(taskContent)) {
-            taskItemContainer.remove();
-        }
-    }
+// Remover tarefa
+const handleDeleteClick = (taskItemContainer) => {
+    taskItemContainer.remove();
     updateLocalStorage();
 };
 
-const handleInputChange = () => {
-    const inputIsValid = validateInput();
-
-    if (inputIsValid) {
-        return inputElement.classList.remove("error");
-    }
-};
-
+// Atualizar LocalStorage com as tarefas do dia
 const updateLocalStorage = () => {
-    const tasks = tasksContainer.childNodes;
     const dataAtual = new Date();
     const dia = dataAtual.getDate();
     const mes = dataAtual.toLocaleString('pt-BR', { month: 'short' });
     const dataFormatada = `${dia} de ${mes} de ${dataAtual.getFullYear()}`;
 
-    const localStorageTasks = [...tasks].map(task => {
-        const content = task.firstChild;
-        const isCompleted = content.classList.contains('completed');
-        return { description: content.innerText, isCompleted: isCompleted };
-    });
+    const tasks = [...tasksContainer.children].map(task => ({
+        description: task.firstChild.innerText,
+        isCompleted: task.firstChild.classList.contains('completed')
+    }));
 
-    localStorage.setItem(dataFormatada, JSON.stringify(localStorageTasks));
+    localStorage.setItem(dataFormatada, JSON.stringify(tasks));
 };
 
-const LoadTasksFromSelectedDate = () => {
+// Carregar tarefas de uma data selecionada
+const loadTasksFromSelectedDate = () => {
     const selectedDate = datePicker.value;
     if (!selectedDate) {
         alert("Por favor, selecione uma data.");
@@ -90,10 +75,12 @@ const LoadTasksFromSelectedDate = () => {
 
     const [year, month, day] = selectedDate.split("-");
     const formattedDate = `${parseInt(day)} de ${new Date(year, month - 1).toLocaleString("pt-BR", { month: "short" })} de ${year}`;
-    const tasksFromLocalStorage = JSON.parse(localStorage.getItem(formattedDate)) || [];
 
-    tasksContainer.innerHTML = "";
-    for (const task of tasksFromLocalStorage) {
+    const tasksFromLocalStorage = JSON.parse(localStorage.getItem(formattedDate)) || [];
+    
+    tasksContainer.innerHTML = ""; // Limpa as tarefas atuais antes de carregar
+
+    tasksFromLocalStorage.forEach(task => {
         const taskItemContainer = document.createElement('div');
         taskItemContainer.classList.add('task-item');
 
@@ -108,17 +95,21 @@ const LoadTasksFromSelectedDate = () => {
 
         const deleteItem = document.createElement('i');
         deleteItem.classList.add("fa", "fa-trash-alt");
-
-        deleteItem.addEventListener("click", () =>
-            handleDeleteClick(taskItemContainer, taskContent));
+        deleteItem.addEventListener("click", () => handleDeleteClick(taskItemContainer));
 
         taskItemContainer.appendChild(taskContent);
         taskItemContainer.appendChild(deleteItem);
         tasksContainer.appendChild(taskItemContainer);
-    }
+    });
 };
 
-loadTasksButton.addEventListener("click", LoadTasksFromSelectedDate);
-addTaskButton.addEventListener("click", handleAddTask);
-inputElement.addEventListener("change", handleInputChange);
+// Atualizar título da página com a data atual
+const data = new Date();
+const dia = data.getDate();
+const mes = data.toLocaleString('pt-BR', { month: 'short' });
+tituloElement.innerHTML = `Lista de afazeres do dia: ${dia} de ${mes} de ${data.getFullYear()}`;
 
+// Adicionando os eventos
+addTaskButton.addEventListener("click", handleAddTask);
+inputElement.addEventListener("input", () => inputElement.classList.remove("error"));
+loadTasksButton.addEventListener("click", loadTasksFromSelectedDate);
